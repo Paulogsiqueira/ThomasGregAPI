@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="1" author="Paulo Gustavo" runInTransaction="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="Cliente"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="Cliente">
+            <column name="Id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="Nome" type="NVARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Email" type="NVARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Logo" type="VARBINARY(MAX)"/>
+        </createTable>
+
+        <sql dbms="mssql">
+            ALTER TABLE Cliente ADD CONSTRAINT DF_Cliente_Logo DEFAULT NULL FOR Logo;
+        </sql>
+    </changeSet>
+
+    <changeSet id="2" author="Paulo Gustavo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="Cliente"/>
+            <not>
+                <indexExists tableName="Cliente" indexName="IX_Cliente_Email"/>
+            </not>
+        </preConditions>
+
+        <createIndex tableName="Cliente" indexName="IX_Cliente_Email" unique="true">
+            <column name="Email"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

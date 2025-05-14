@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+
+    <changeSet id="1" author="Paulo Gustavo">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="Logradouro"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="Logradouro">
+            <column name="Id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ClienteId" type="INT">
+                <constraints nullable="false" foreignKeyName="FK_Logradouro_Cliente"/>
+            </column>
+            <column name="Rua" type="NVARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Numero" type="NVARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Bairro" type="NVARCHAR(50)"/>
+            <column name="Cidade" type="NVARCHAR(50)"/>
+            <column name="Estado" type="NVARCHAR(2)"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="Logradouro"
+                baseColumnNames="ClienteId"
+                referencedTableName="Cliente"
+                referencedColumnNames="Id"
+                constraintName="FK_Logradouro_Cliente"/>
+    </changeSet>
+</databaseChangeLog>
